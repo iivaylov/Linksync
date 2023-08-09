@@ -22,8 +22,6 @@ function Bottombar() {
            )}
         )}
         </div>
-
-
     </section>
     
         )

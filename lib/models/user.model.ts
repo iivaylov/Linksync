@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
             ref: 'Post'
         }
     ],
-    onboarder: {
+    onboarded: {
         type: Boolean,
         default: false,
     },

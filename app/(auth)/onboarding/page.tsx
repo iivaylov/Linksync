@@ -1,10 +1,14 @@
 import AccountProfile from "@/components/forms/AccountProfile";
-import {currentUser} from "@clerk/nextjs"
+import { fetchUser } from "@/lib/actions/user.actions";
+import {currentUser} from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 async function Page() {
     const user = await currentUser();
+    if(!user) return null;
 
-    const userInfo = {};
+    const userInfo = await fetchUser(user.id);
+    if(userInfo?.onboarder) redirect('/');
 
     const userData = {
         id: user?.id,

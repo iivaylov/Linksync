@@ -1,19 +1,19 @@
 "use client"
 
+import * as z from "zod"
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UserValidation } from "@/lib/validations/user";
-import * as z from "zod"
-import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { isBase64Image } from "@/lib/utils";
 import { useUploadThing } from '@/lib/uploadthing';
 import { updateUser } from "@/lib/actions/user.actions";
-import {usePathname, useRouter} from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface Props {
   user: {
@@ -28,12 +28,13 @@ interface Props {
 }
 
 const AccountProfile = ({ user, btnTitle }: Props) => {
-  const [files, setFiles] = useState<File[]>([]);
-  const {startUpload } = useUploadThing("media");
   const router = useRouter();
   const pathname = usePathname();
+  const { startUpload } = useUploadThing("media");
 
-  const form = useForm({
+  const [files, setFiles] = useState<File[]>([]);
+
+  const form = useForm<z.infer<typeof UserValidation>>({
     resolver: zodResolver(UserValidation),
     defaultValues: {
       profile_photo: user?.image || '',
@@ -69,27 +70,27 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
     const blob = values.profile_photo;
 
     const hasImageChanged = isBase64Image(blob);
-
     if (hasImageChanged) {
       const imgRes = await startUpload(files);
 
-      if(imgRes && imgRes[0].fileUrl) {
+      if (imgRes && imgRes[0].fileUrl) {
         values.profile_photo = imgRes[0].fileUrl;
       }
     }
 
     await updateUser({
-      userId: user.id, 
-      username: values.username, 
-      name: values.name, 
-      bio: values.bio, 
-      image: values.profile_photo, 
+      userId: user.id,
+      username: values.username,
+      name: values.name,
+      bio: values.bio,
+      image: values.profile_photo,
       path: pathname
     });
+    
 
-    if(pathname === '/profile/edit'){
+    if (pathname === '/profile/edit') {
       router.back();
-    }else {
+    } else {
       router.push('/')
     }
   }
@@ -97,7 +98,6 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-start gap-10">
-
         <FormField
           control={form.control}
           name="profile_photo"
