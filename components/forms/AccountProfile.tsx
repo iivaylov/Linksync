@@ -4,7 +4,7 @@ import * as z from "zod"
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -86,7 +86,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
       image: values.profile_photo,
       path: pathname
     });
-    
+
 
     if (pathname === '/profile/edit') {
       router.back();
@@ -114,6 +114,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
               <FormControl className="flex-1 text-base-semibold text-gray-200">
                 <Input type="file" accept="image/*" placeholder="Upload a photo" className="account-form_image-input" onChange={(e) => handleImage(e, field.onChange)} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -127,6 +128,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
               <FormControl>
                 <Input type="text" className="account-form_input no-focus" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -140,6 +142,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
               <FormControl>
                 <Input type="text" className="account-form_input no-focus" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -153,6 +156,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
               <FormControl>
                 <Textarea rows={10} className="account-form_input no-focus" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
