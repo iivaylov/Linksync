@@ -27,10 +27,8 @@ export async function createPost({ text, author, communityId, path }: Params) {
 export async function fetchPosts(pageNumber = 1, pageSize = 20) {
     connectToDB();
 
-    //Calculate the number of posts to skip
     const skipAmount = (pageNumber - 1) * pageSize;
 
-    //Fetch the posts that do not have parents (top-level posts...)
     const postsQuery = Post.find({ parentId: { $in: [null, undefined] } })
         .sort({ createdAt: 'desc' })
         .skip(skipAmount)
@@ -81,5 +79,34 @@ export async function fetchPostById(id: string) {
         return post;
     } catch (error: any) {
         throw new Error(`Error fetching post: ${error.message}`)
+    }
+}
+
+export async function addCommentToPost(postId: string, commentText: string, userId: string, path: string) {
+    connectToDB();
+
+    try {
+        const originalPost = await Post.findById(postId);
+
+        if (!originalPost) {
+            throw new Error('Post not found');
+        }
+
+        const commentPost = new Post({
+            text: commentText,
+            author: userId,
+            parentId: postId
+        })
+
+        const savedCommentPost = await commentPost.save();
+
+        originalPost.children.push(savedCommentPost._id);
+
+        await originalPost.save();
+
+        revalidatePath(path);
+
+    } catch (error: any) {
+        throw new Error(`Error adding comment to post: ${error.message}`)
     }
 }

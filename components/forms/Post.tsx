@@ -13,7 +13,6 @@ import { createPost } from "@/lib/actions/post.actions";
 import { getRandomValues } from "crypto";
 
 // import { updateUser } from "@/lib/actions/user.actions";
-// import { UserValidation } from "@/lib/validations/user";
 interface Props {
   user: {
     id: string,
