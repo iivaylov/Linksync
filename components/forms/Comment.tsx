@@ -56,7 +56,7 @@ const Comment = ({postId, currentUserImg, currentUserId} : Props) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="comment-form_btn">Replay</Button>
+        <Button type="submit" className="comment-form_btn">Reply</Button>
         </form>
     </Form>
     )
