@@ -3,14 +3,13 @@
 import * as z from "zod"
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { usePathname, useRouter } from 'next/navigation';
 import { CommentValidation } from "@/lib/validations/post";
 //import { createPost } from "@/lib/actions/post.actions";
-import { getRandomValues } from "crypto";
 import Image from "next/image";
 import { addCommentToPost } from "@/lib/actions/post.actions";
 
