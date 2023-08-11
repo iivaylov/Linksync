@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose"
+import Post from "../models/post.model";
 
 interface Params {
   userId: string;
@@ -17,7 +18,7 @@ export async function updateUser({ userId, bio, name, path, username, image, }: 
   try {
     connectToDB();
 
-    await User.findOneAndUpdate({ id: userId }, { username: username.toLowerCase(), name, bio, image, onboarded: true}, { upsert: true });
+    await User.findOneAndUpdate({ id: userId }, { username: username.toLowerCase(), name, bio, image, onboarded: true }, { upsert: true });
 
     if (path === "/profile/edit") {
       revalidatePath(path);
@@ -30,9 +31,37 @@ export async function updateUser({ userId, bio, name, path, username, image, }: 
 export async function fetchUser(userId: string) {
   try {
     connectToDB();
-    
+
     return await User.findOne({ id: userId });
   } catch (error: any) {
     throw new Error(`Failder to fetch user: ${error.message}`)
+  }
+}
+
+export async function fetchUserPosts(userId: string) {
+  try {
+    connectToDB();
+
+    //Find all osts authored by user with the give userId
+
+    //TODO Populate community
+    const posts = await User.findOne({ id: userId })
+      .populate({
+        path: 'posts',
+        model: Post,
+        populate: {
+          path: 'children',
+          model: Post,
+          populate: {
+            path: 'author',
+            model: User,
+            select: 'name image id'
+          }
+        }
+      })
+
+      return posts;
+  } catch (error : any) {
+    throw new Error(`Failed to fetch user posts: ${error.message}`)
   }
 }
