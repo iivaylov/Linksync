@@ -154,7 +154,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
             <FormItem className="flex flex-col w-full gap-3">
               <FormLabel className="text-base-semibold text-light-2">Bio</FormLabel>
               <FormControl>
-                <Textarea rows={10} className="account-form_input no-focus" {...field} />
+                <Textarea rows={4} className="account-form_input no-focus" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
