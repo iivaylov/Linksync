@@ -25,29 +25,33 @@ export async function createPost({ text, author, communityId, path }: Params) {
 }
 
 export async function fetchPosts(pageNumber = 1, pageSize = 20) {
-    connectToDB();
+    try {
+        connectToDB();
 
-    const skipAmount = (pageNumber - 1) * pageSize;
+        const skipAmount = (pageNumber - 1) * pageSize;
 
-    const postsQuery = Post.find({ parentId: { $in: [null, undefined] } })
-        .sort({ createdAt: 'desc' })
-        .skip(skipAmount)
-        .limit(pageSize)
-        .populate({ path: 'author', model: User })
-        .populate({ path: 'children', populate: { path: 'author', model: User, select: "_id name parentId image" } })
+        const postsQuery = Post.find({ parentId: { $in: [null, undefined] } })
+            .sort({ createdAt: 'desc' })
+            .skip(skipAmount)
+            .limit(pageSize)
+            .populate({ path: 'author', model: User })
+            .populate({ path: 'children', populate: { path: 'author', model: User, select: "_id name parentId image" } })
 
-    const totalPostsCount = await Post.countDocuments({ parentId: { $in: [null, undefined] } });
+        const totalPostsCount = await Post.countDocuments({ parentId: { $in: [null, undefined] } });
 
-    const posts = await postsQuery.exec();
+        const posts = await postsQuery.exec();
 
-    const isNext = totalPostsCount > skipAmount + posts.length;
+        const isNext = totalPostsCount > skipAmount + posts.length;
 
-    return { posts, isNext }
+        return { posts, isNext }
+    } catch (error: any) {
+        throw new Error(`Error fetching all posts: ${error.message}`)
+    }
 }
 
 export async function fetchPostById(id: string) {
-    connectToDB();
     try {
+        connectToDB();
 
         //TODO: Populate Community
         const post = await Post.findById(id)
@@ -83,9 +87,9 @@ export async function fetchPostById(id: string) {
 }
 
 export async function addCommentToPost(postId: string, commentText: string, userId: string, path: string) {
-    connectToDB();
-
     try {
+        connectToDB();
+
         const originalPost = await Post.findById(postId);
 
         if (!originalPost) {
