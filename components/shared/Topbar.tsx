@@ -27,6 +27,9 @@ function Topbar() {
             appearance={{
                 elements: {
                     organizationSwitcherTrigger: "py-2 px-4"
+                },
+                variables: {
+                    colorPrimary: '#928490'
                 }
             }}
             />
