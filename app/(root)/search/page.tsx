@@ -1,7 +1,5 @@
-import PostCard from "@/components/cards/PostCard";
+
 import UserCard from "@/components/cards/UserCard";
-import Comment from "@/components/forms/Comment";
-import { fetchPostById } from "@/lib/actions/post.actions";
 import { fetchUser, fetchUsers } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
