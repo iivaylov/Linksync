@@ -1,3 +1,4 @@
+import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,8 +10,8 @@ interface Props {
     author: {
         name: string;
         image: string;
-        id: string
-    }
+        id: string;
+    };
     community: {
         id: string;
         name: string;
@@ -20,8 +21,8 @@ interface Props {
     comments: {
         author: {
             image: string;
-        }
-    }[]
+        };
+    }[];
     isComment?: boolean;
 }
 
@@ -51,19 +52,18 @@ const PostCard = ({
 
                     <div className="flex w-full flex-col">
                         <Link href={`/profile/${author.id}`} className="w-fit">
-                            <h4 className="cursor-pointer text-base-semibold text-light-1">{author.name}</h4>
+                            <h4 className="cursor-pointer text-base-semibold text-light-1">
+                                {author.name}
+                            </h4>
                         </Link>
 
                         <p className="mt-2 text-small-regulat text-light-2">{content}</p>
 
                         <div className={`${isComment && 'mb-10'} mt-5 flex flex-col gap-3`}>
                             <div className="flex gap-3.5">
-                                {/* <Image src="/assets/heart-gray.svg" alt="heart" width={24} height={24} className="cursor-pointer object-contain" /> */}
                                 <Link href={`/post/${id}`}>
                                     <Image src="/assets/reply.svg" alt="replay" width={24} height={24} className="cursor-pointer object-contain" />
                                 </Link>
-                                {/* <Image src="/assets/repost.svg" alt="heart" width={24} height={24} className="cursor-pointer object-contain" />
-                                <Image src="/assets/share.svg" alt="heart" width={24} height={24} className="cursor-pointer object-contain" /> */}
                             </div>
 
                             {isComment && comments.length > 0 && (
@@ -71,10 +71,29 @@ const PostCard = ({
                                     <p className="mt-1 text-subtle-medium text-gray-1">{comments.length} replies</p>
                                 </Link>
                             )}
-
                         </div>
                     </div>
                 </div>
+
+                {/*TODO: Delete Post*/}
+                {/*TODO: Show comment logos*/}
+
+                {!isComment && community && (
+                    <Link href={`/communities/${community.id}`} className="mt-5 flex items-center">
+                        <p className='text-subtle-medium text-gray-1'>
+                            {formatDateString(createdAt)}
+                            {community && ` - ${community.name} Community`}
+                        </p>
+
+                        <Image
+                            src={community.image}
+                            alt={community.name}
+                            width={14}
+                            height={14}
+                            className='ml-1 rounded-full object-cover'
+                        />
+                    </Link>
+                )}
             </div>
         </article>
     )

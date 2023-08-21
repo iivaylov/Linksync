@@ -1,10 +1,13 @@
 "use server"
 
-import { revalidatePath } from "next/cache";
-import User from "../models/user.model";
-import { connectToDB } from "../mongoose"
-import Post from "../models/post.model";
 import { FilterQuery, SortOrder } from "mongoose";
+import { revalidatePath } from "next/cache";
+
+import Community from "../models/community.model";
+import Post from "../models/post.model";
+import User from "../models/user.model";
+
+import { connectToDB } from "../mongoose";
 
 interface Params {
   userId: string;
@@ -15,7 +18,7 @@ interface Params {
   path: string;
 }
 
-export async function updateUser({ userId, bio, name, path, username, image, }: Params): Promise<void> {
+export async function updateUser({ userId, bio, name, path, username, image }: Params): Promise<void> {
   try {
     connectToDB();
 
@@ -33,9 +36,12 @@ export async function fetchUser(userId: string) {
   try {
     connectToDB();
 
-    return await User.findOne({ id: userId });
+    return await User.findOne({ id: userId }).populate({
+      path: "communities",
+      model: Community,
+    });
   } catch (error: any) {
-    throw new Error(`Failder to fetch user: ${error.message}`)
+    throw new Error(`Failed to fetch user: ${error.message}`)
   }
 }
 
@@ -43,23 +49,26 @@ export async function fetchUserPosts(userId: string) {
   try {
     connectToDB();
 
-    //Find all osts authored by user with the give userId
-
-    //TODO Populate community
-    const posts = await User.findOne({ id: userId })
-      .populate({
-        path: 'posts',
-        model: Post,
-        populate: {
+    const posts = await User.findOne({ id: userId }).populate({
+      path: 'posts',
+      model: Post,
+      populate: [
+        {
+          path: 'community',
+          model: Community,
+          select: 'name id image _id'
+        },
+        {
           path: 'children',
           model: Post,
           populate: {
             path: 'author',
             model: User,
             select: 'name image id'
-          }
-        }
-      })
+          },
+        },
+      ],
+    });
 
     return posts;
   } catch (error: any) {
@@ -121,10 +130,8 @@ export async function getActivity(userId: string) {
   try {
     connectToDB();
 
-    //find all posts created by the user
     const userPosts = await Post.find({ author: userId });
 
-    //collect all the child post ids (replies) from the 'children'
     const childPostIds = userPosts.reduce((acc, userPost) => {
       return acc.concat(userPost.children);
     }, []);
