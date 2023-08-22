@@ -79,7 +79,6 @@ export const POST = async (request: Request) => {
     }
   }
 
-
   if (eventType === "organizationInvitation.created") {
     try {
       console.log("Invitation created", evnt?.data);

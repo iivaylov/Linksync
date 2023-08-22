@@ -49,6 +49,10 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
             .skip(skipAmount)
             .limit(pageSize)
             .populate({ path: 'author', model: User })
+            .populate({
+                path: "community",
+                model: Community,
+              })
             .populate({ path: 'children', populate: { path: 'author', model: User, select: "_id name parentId image" } })
 
         const totalPostsCount = await Post.countDocuments({ parentId: { $in: [null, undefined] } });
@@ -67,12 +71,16 @@ export async function fetchPostById(id: string) {
     try {
         connectToDB();
 
-        //TODO: Populate Community
         const post = await Post.findById(id)
             .populate({
                 path: 'author',
                 model: User,
                 select: "_id id name image"
+            })
+            .populate({
+                path: 'community',
+                model: Community,
+                select: '_id id name image'
             })
             .populate({
                 path: 'children',

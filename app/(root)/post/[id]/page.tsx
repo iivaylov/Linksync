@@ -1,9 +1,11 @@
-import PostCard from "@/components/cards/PostCard";
-import Comment from "@/components/forms/Comment";
-import { fetchPostById } from "@/lib/actions/post.actions";
-import { fetchUser } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import { currentUser } from "@clerk/nextjs";
+
+import Comment from "@/components/forms/Comment";
+import PostCard from "@/components/cards/PostCard";
+
+import { fetchUser } from "@/lib/actions/user.actions";
+import { fetchPostById } from "@/lib/actions/post.actions";
 
 const Page = async ({ params }: { params: { id: string } }) => {
     if(!params.id) return null;
@@ -19,10 +21,9 @@ const Page = async ({ params }: { params: { id: string } }) => {
     return(
         <section className="relative">
         <div>
-            <PostCard 
-                key={post._id}
+            <PostCard
                 id={post._id}
-                currentUserId={user?.id || ''} 
+                currentUserId={user.id} 
                 parentId={post.parentId} 
                 content={post.text} 
                 author={post.author}
