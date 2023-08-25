@@ -1,11 +1,13 @@
-import { ClerkProvider } from "@clerk/nextjs"
-import { Inter } from "next/font/google"
+import React from "react";
+import { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 
 import '../globals.css'
 
-export const metadata = {
-    title: 'Linksync',
-    description: ' Meta Linksync Application'
+export const metadata: Metadata = {
+    title: 'Auth',
+    description: 'Linksync authentication and authorization'
 }
 
 const inter = Inter({ subsets: ["latin"] })
