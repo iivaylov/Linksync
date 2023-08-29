@@ -7,9 +7,7 @@ import { fetchPosts } from "@/lib/actions/post.actions";
 import { fetchUser } from "@/lib/actions/user.actions";
 import Pagination from "@/components/shared/Pagination";
 
-export default async function Home({ searchParams }: {
-  searchParams: { [key: string]: string | undefined };
-}) {
+const Home = async ({ searchParams }: {searchParams: { [key: string]: string | undefined }}) => {
   const user = await currentUser();
   if(!user) redirect('/sign-in');
 
@@ -55,3 +53,5 @@ export default async function Home({ searchParams }: {
     </>
   );
 }
+
+export default Home;
