@@ -6,7 +6,7 @@ import { profileTabs } from "@/constants";
 
 import PostsTab from "@/components/shared/PostsTab";
 import ProfileHeader from "@/components/shared/ProfileHeader";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
 
 import { fetchUser } from "@/lib/actions/user.actions";
 

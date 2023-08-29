@@ -9,7 +9,7 @@ import {
   createCommunity,
   deleteCommunity,
   removeUserFromCommunity,
-  updateCommunityInfo,
+  updateCommunityInfo
 } from "@/lib/actions/community.actions";
 
 type EventType =
