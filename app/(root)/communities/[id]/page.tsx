@@ -1,17 +1,20 @@
 import Image from "next/image";
 import { currentUser } from "@clerk/nextjs";
+
 import { communityTabs } from "@/constants";
 
-import ProfileHeader from "@/components/shared/ProfileHeader";
-import PostsTab from "@/components/shared/PostsTab";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { fetchCommunityDetails } from "@/lib/actions/community.actions";
 import UserCard from "@/components/cards/UserCard";
+import PostsTab from "@/components/shared/PostsTab";
+import ProfileHeader from "@/components/shared/ProfileHeader";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+import { fetchCommunityDetails } from "@/lib/actions/community.actions";
+import { redirect } from "next/navigation";
 
 
-async function Page({ params }: { params: { id: string } }) {
+const Page = async ({ params }: { params: { id: string } }) => {
     const user = await currentUser();
-    if (!user) return null;
+    if (!user) redirect('/sign-in');
 
     const communityDetails = await fetchCommunityDetails(params.id)
 
@@ -68,13 +71,13 @@ async function Page({ params }: { params: { id: string } }) {
                         </section>
                     </TabsContent>
 
-                    <TabsContent value="requests" className="w-full text-light-1">
+                    {/* <TabsContent value="requests" className="w-full text-light-1">
                         <PostsTab
                             currentUserId={user.id}
                             accountId={communityDetails._id}
                             accountType='Community'
                         />
-                    </TabsContent>
+                    </TabsContent> */}
 
                 </Tabs>
             </div>
