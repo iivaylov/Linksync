@@ -5,7 +5,6 @@ import { fetchUserPosts } from "@/lib/actions/user.actions";
 
 import PostCard from "../cards/PostCard";
 
-
 interface Result {
     name: string;
     image: string;

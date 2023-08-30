@@ -40,8 +40,9 @@ export async function fetchUser(userId: string) {
       path: "communities",
       model: Community,
     });
-  } catch (error: any) {
-    throw new Error(`Failed to fetch user: ${error.message}`)
+  } catch (error) {
+    console.log('Failed to fetch user: ', error);
+    throw error;
   }
 }
 
@@ -52,6 +53,7 @@ export async function fetchUserPosts(userId: string) {
     const posts = await User.findOne({ id: userId }).populate({
       path: 'posts',
       model: Post,
+      options: { sort: { 'createdAt': -1 } },
       populate: [
         {
           path: 'community',
@@ -76,6 +78,10 @@ export async function fetchUserPosts(userId: string) {
   }
 }
 
+function escapeRegExp(string: string) {
+  return string.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
 export async function fetchUsers({
   userId,
   searchString = '',
@@ -93,7 +99,9 @@ export async function fetchUsers({
 
     const skipAmount = (pageNumber - 1) * pageSize;
 
-    const regex = new RegExp(searchString, 'i');
+    const escapedSearchString = escapeRegExp(searchString);
+
+    const regex = new RegExp(escapedSearchString, 'i');
 
     const query: FilterQuery<typeof User> = {
       id: { $ne: userId }
@@ -122,7 +130,7 @@ export async function fetchUsers({
 
     return { users, isNext };
   } catch (error: any) {
-    throw new Error(`Failed to fetch users: ${error.message}`)
+    throw new Error(`Failed to fetch users: ${error.message}`);
   }
 }
 

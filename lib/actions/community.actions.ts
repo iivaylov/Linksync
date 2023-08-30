@@ -90,10 +90,18 @@ export async function fetchCommunityPosts(id: string) {
       ],
     });
 
+    if (!communityPosts) {
+      throw new Error('No community posts found for the given ID');
+    }
+
     return communityPosts;
   } catch (error: any) {
     throw new Error(`Error fetching community posts: ${error.message}`);
   }
+}
+
+function escapeRegExp(string: string) {
+  return string.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 }
 
 export async function fetchCommunities({
@@ -112,7 +120,9 @@ export async function fetchCommunities({
 
     const skipAmount = (pageNumber - 1) * pageSize;
 
-    const regex = new RegExp(searchString, "i");
+    const escapedSearchString = escapeRegExp(searchString);
+
+    const regex = new RegExp(escapedSearchString, "i");
 
     const query: FilterQuery<typeof Community> = {};
 
