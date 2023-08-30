@@ -2,11 +2,11 @@ import { OrganizationSwitcher, SignOutButton, SignedIn } from "@clerk/nextjs"
 import Link from "next/link"
 import Image from "next/image"
 
-function Topbar() {
+const Topbar = () => {
     return (
         <nav className="topbar">
             <Link href="/" className="flex items-center gap-4">
-                <Image src="/assets/logo.svg" alt="logo" width={28} height ={28}/>
+                <Image src="/assets/logo.svg" alt="logo" width={28} height={28} />
                 <p className="text-heading3-bold text-light-1 max-xs:hidden">Linksync</p>
             </Link>
 
@@ -15,26 +15,25 @@ function Topbar() {
                     <SignedIn>
                         <SignOutButton>
                             <div className="flex cursor-pointer">
-                                <Image src="/assets/logout.svg" alt="logout" width={24} height={24}/>
+                                <Image src="/assets/logout.svg" alt="logout" width={24} height={24} />
                             </div>
                         </SignOutButton>
                     </SignedIn>
                 </div>
             </div>
 
-        
             <OrganizationSwitcher
-            appearance={{
-                elements: {
-                    organizationSwitcherTrigger: "py-2 px-4"
-                },
-                variables: {
-                    colorPrimary: '#928490'
-                }
-            }}
+                appearance={{
+                    elements: {
+                        organizationSwitcherTrigger: "py-2 px-4"
+                    },
+                    variables: {
+                        colorPrimary: '#928490'
+                    }
+                }}
             />
         </nav>
-        );
+    );
 }
 
 export default Topbar;

@@ -19,7 +19,7 @@ export async function createPost({ text, author, communityId, path }: Params) {
     try {
         connectToDB();
 
-        const communityIdObject = await Community.findOne({ id: communityId },{ _id: 1 });
+        const communityIdObject = await Community.findOne({ id: communityId }, { _id: 1 });
 
         const createPost = await Post.create({ text, author, community: communityIdObject });
 
@@ -27,9 +27,9 @@ export async function createPost({ text, author, communityId, path }: Params) {
 
         if (communityIdObject) {
             await Community.findByIdAndUpdate(communityIdObject, {
-              $push: { posts: createPost._id },
+                $push: { posts: createPost._id },
             });
-          }
+        }
 
 
         revalidatePath(path);
@@ -52,7 +52,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
             .populate({
                 path: "community",
                 model: Community,
-              })
+            })
             .populate({ path: 'children', populate: { path: 'author', model: User, select: "_id name parentId image" } })
 
         const totalPostsCount = await Post.countDocuments({ parentId: { $in: [null, undefined] } });
@@ -134,5 +134,66 @@ export async function addCommentToPost(postId: string, commentText: string, user
 
     } catch (error: any) {
         throw new Error(`Error adding comment to post: ${error.message}`)
+    }
+}
+
+async function fetchAllChildPosts(postId: string): Promise<any[]> {
+    const childPosts = await Post.find({ parentId: postId });
+  
+    const descendantPosts = [];
+    for (const childPhost of childPosts) {
+      const descendants = await fetchAllChildPosts(childPhost._id);
+      descendantPosts.push(childPhost, ...descendants);
+    }
+  
+    return descendantPosts;
+  }
+
+export async function deletePost(id: string, path: string): Promise<void> {
+    try {
+        connectToDB();
+
+        const mainPost = await Post.findById(id).populate("author community");
+
+        if (!mainPost) {
+            throw new Error("Post not found");
+        }
+
+        const descendantPosts = await fetchAllChildPosts(id);
+
+        const descendantPostIds = [
+            id,
+            ...descendantPosts.map((post: { _id: any; }) => post._id),
+        ];
+
+        const uniqueAuthorIds = new Set(
+            [
+                ...descendantPosts.map((post: { author: { _id: { toString: () => any; }; }; }) => post.author?._id?.toString()),
+                mainPost.author?._id?.toString(),
+            ].filter((id) => id !== undefined)
+        );
+
+        const uniqueCommunityIds = new Set(
+            [
+                ...descendantPosts.map((post: { community: { _id: { toString: () => any; }; }; }) => post.community?._id?.toString()),
+                mainPost.community?._id?.toString(),
+            ].filter((id) => id !== undefined)
+        );
+
+        await Post.deleteMany({ _id: { $in: descendantPostIds } });
+
+        await User.updateMany(
+            { _id: { $in: Array.from(uniqueAuthorIds) } },
+            { $pull: { threads: { $in: descendantPostIds } } }
+        );
+
+        await Community.updateMany(
+            { _id: { $in: Array.from(uniqueCommunityIds) } },
+            { $pull: { threads: { $in: descendantPostIds } } }
+        );
+
+        revalidatePath(path);
+    } catch (error: any) {
+        throw new Error(`Failed to delete post: ${error.message}`);
     }
 }
