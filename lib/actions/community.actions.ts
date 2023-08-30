@@ -60,9 +60,8 @@ export async function fetchCommunityDetails(id: string) {
     ]);
 
     return communityDetails;
-  } catch (error) {
-    console.error("Error fetching community details:", error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(`Error fetching community details: ${error.message}`);
   }
 }
 
@@ -92,10 +91,8 @@ export async function fetchCommunityPosts(id: string) {
     });
 
     return communityPosts;
-  } catch (error) {
-    // Handle any errors
-    console.error("Error fetching community posts:", error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(`Error fetching community posts: ${error.message}`);
   }
 }
 
@@ -141,16 +138,12 @@ export async function fetchCommunities({
     const isNext = totalCommunitiesCount > skipAmount + communities.length;
 
     return { communities, isNext };
-  } catch (error) {
-    console.error("Error fetching communities:", error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(`Error fetching communities: ${error.message}`);
   }
 }
 
-export async function addMemberToCommunity(
-  communityId: string,
-  memberId: string
-) {
+export async function addMemberToCommunity(communityId: string, memberId: string) {
   try {
     connectToDB();
 
@@ -177,16 +170,12 @@ export async function addMemberToCommunity(
     await user.save();
 
     return community;
-  } catch (error) {
-    console.error("Error adding member to community:", error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(`Error adding member to community: ${error.message}`);
   }
 }
 
-export async function removeUserFromCommunity(
-  userId: string,
-  communityId: string
-) {
+export async function removeUserFromCommunity(userId: string, communityId: string) {
   try {
     connectToDB();
 
@@ -204,32 +193,23 @@ export async function removeUserFromCommunity(
       throw new Error("Community not found");
     }
 
-    // Remove the user's _id from the members array in the community
     await Community.updateOne(
       { _id: communityIdObject._id },
       { $pull: { members: userIdObject._id } }
     );
 
-    // Remove the community's _id from the communities array in the user
     await User.updateOne(
       { _id: userIdObject._id },
       { $pull: { communities: communityIdObject._id } }
     );
 
     return { success: true };
-  } catch (error) {
-    // Handle any errors
-    console.error("Error removing user from community:", error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(`Error removing user from community: ${error.message}`);
   }
 }
 
-export async function updateCommunityInfo(
-  communityId: string,
-  name: string,
-  username: string,
-  image: string
-) {
+export async function updateCommunityInfo(communityId: string, name: string, username: string, image: string) {
   try {
     connectToDB();
 
@@ -243,9 +223,8 @@ export async function updateCommunityInfo(
     }
 
     return updatedCommunity;
-  } catch (error) {
-    console.error("Error updating community information:", error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(`Error updating community information: ${error.message}`);
   }
 }
 
@@ -273,8 +252,7 @@ export async function deleteCommunity(communityId: string) {
     await Promise.all(updateUserPromises);
 
     return deletedCommunity;
-  } catch (error) {
-    console.error("Error deleting community: ", error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(`Error deleting community: ${error.message}`);
   }
 }
