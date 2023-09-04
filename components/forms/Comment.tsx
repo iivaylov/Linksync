@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import * as z from "zod"
 import Image from "next/image";
@@ -26,7 +26,7 @@ const Comment = ({ postId, currentUserImg, currentUserId }: Props) => {
   const form = useForm<z.infer<typeof CommentValidation>>({
     resolver: zodResolver(CommentValidation),
     defaultValues: {
-      post: ''
+      post: '',
     },
   });
 
