@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { revalidatePath } from "next/cache";
 
@@ -139,15 +139,15 @@ export async function addCommentToPost(postId: string, commentText: string, user
 
 async function fetchAllChildPosts(postId: string): Promise<any[]> {
     const childPosts = await Post.find({ parentId: postId });
-  
+
     const descendantPosts = [];
     for (const childPhost of childPosts) {
-      const descendants = await fetchAllChildPosts(childPhost._id);
-      descendantPosts.push(childPhost, ...descendants);
+        const descendants = await fetchAllChildPosts(childPhost._id);
+        descendantPosts.push(childPhost, ...descendants);
     }
-  
+
     return descendantPosts;
-  }
+}
 
 export async function deletePost(id: string, path: string): Promise<void> {
     try {
@@ -163,19 +163,19 @@ export async function deletePost(id: string, path: string): Promise<void> {
 
         const descendantPostIds = [
             id,
-            ...descendantPosts.map((post: { _id: any; }) => post._id),
+            ...descendantPosts.map((post) => post._id),
         ];
 
         const uniqueAuthorIds = new Set(
             [
-                ...descendantPosts.map((post: { author: { _id: { toString: () => any; }; }; }) => post.author?._id?.toString()),
+                ...descendantPosts.map((post) => post.author?._id?.toString()),
                 mainPost.author?._id?.toString(),
             ].filter((id) => id !== undefined)
         );
 
         const uniqueCommunityIds = new Set(
             [
-                ...descendantPosts.map((post: { community: { _id: { toString: () => any; }; }; }) => post.community?._id?.toString()),
+                ...descendantPosts.map((post) => post.community?._id?.toString()),
                 mainPost.community?._id?.toString(),
             ].filter((id) => id !== undefined)
         );
@@ -184,12 +184,12 @@ export async function deletePost(id: string, path: string): Promise<void> {
 
         await User.updateMany(
             { _id: { $in: Array.from(uniqueAuthorIds) } },
-            { $pull: { threads: { $in: descendantPostIds } } }
+            { $pull: { posts: { $in: descendantPostIds } } }
         );
 
         await Community.updateMany(
             { _id: { $in: Array.from(uniqueCommunityIds) } },
-            { $pull: { threads: { $in: descendantPostIds } } }
+            { $pull: { posts: { $in: descendantPostIds } } }
         );
 
         revalidatePath(path);
