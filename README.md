@@ -1,40 +1,54 @@
-# [Linksync](https://linksync-bay.vercel.app/)
+# [Linksync](https://linksync-bay.vercel.app/) - Software engineers' social media
 
+Linksync: A dedicated platform for software engineers 💻 to come together to discuss 🗣️, collaborate 👩‍💻👨‍💻, and network 🌐 around various topics in the tech world 🌍. Built with love ❤️ for the coding community, this platform aims to be the premier destination 📍 for tech talk! 🚀🔧🖥️.
 
 [![Linksync](./public/screenshot.png)](https://linksync-bay.vercel.app/)
 
+# Features
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## 🔐 **Secure Registration**
+- Register using a secure, encrypted password mechanism.
+- Option to sign in using Gmail or GitHub for a seamless experience.
+
+## 🚀 **Onboarding Process**
+- Set up your personal details such as name and username.
+- Upload a profile photo to make your profile stand out.
+- Craft a bio that highlights your interests and expertise.
+
+## 🌐 **Create Community**
+- Start your own niche community or join existing ones.
+- Manage members and their roles within the community.
+
+## 📝 **Create Posts**
+- Share your thoughts with the community.
+
+## 💬 **Create Comments**
+- Engage in meaningful discussions on posts.
+- Reply to other comments to create nested discussion threads.
+
+## 🗑️ **Delete Posts**
+- Remove any of your posts with a simple click.
+
+## ✏️ **Edit Profile**
+- Keep your profile up-to-date with the latest information.
+- Change profile pictures, update bios, or modify other personal details.
 
 ## Getting Started
 
-First, run the development server:
+To help you jump right into Linksync and test its features without going through the registration process, we've provided a test account:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+**Username:** `ectyare`  
+**Password:** `2t8LK31%2&`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🚫 **Please note:**
+- This is a demo account with limited privileges.
+- Do not use this account for personal posts or any sensitive data.
+- Since this is a shared test account, any data you input may be visible to others.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Steps to Access:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Navigate to the [Linksync login page](https://linksync-bay.vercel.app/sign-in).
+2. Enter the provided username and password.
+3. Explore and test the platform's features!
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+⚠️ Remember to logout once you're done to maintain the integrity of the test account.
