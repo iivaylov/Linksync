@@ -35,13 +35,12 @@ Linksync: A dedicated platform for software engineers 💻 to come together to d
 
 ## Getting Started
 
-To help you jump right into Linksync and test its features without going through the registration process, we've provided a test account:
+To assist you in diving directly into Linksync and testing its features, I've provided a test account for you to use without the need to register.
 
 **Username:** `ectyare`  
 **Password:** `2t8LK31%2&`
 
 🚫 **Please note:**
-- This is a demo account with limited privileges.
 - Do not use this account for personal posts or any sensitive data.
 - Since this is a shared test account, any data you input may be visible to others.
 
